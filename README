@@ -1,0 +1,13 @@
+This is a really basic example how django-shop looks with real templates.
+
+Setup instructions are simple:
+
+- Make sure you have django and django-shop installed (i recommend creating a virtualenv for this)
+
+Then:
+
+- Add 'shop_example' to INSTALLED_APPS
+
+or using the shipped sample project:
+
+- cd project && python manage.py syncdb && python manage.py runserver
