@@ -1,0 +1,64 @@
+{% load i18n %}
+{% load shop_tags %}
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>Example shop</title>
+	<link rel="stylesheet" href="{% get_static_prefix %}css/960.css" type="text/css" charset="utf-8" />
+	<link rel="stylesheet" href="{% get_static_prefix %}css/reset.css" type="text/css" charset="utf-8" />
+	<link rel="stylesheet" href="{% get_static_prefix %}css/text.css" type="text/css" charset="utf-8" />
+	<link rel="stylesheet" href="{% get_static_prefix %}style.css" type="text/css" charset="utf-8" />
+	{% block js %}{% endblock %}
+	{% block canonical %}{% endblock %}
+</head>
+<body id="page_detail" onload="">
+	{% block top %}{% endblock %}
+	<div class="page">
+		<div class="container_12" id="wrapper">
+			<h2 class="page_title"><a href="/"></a></h2>
+			<div id="pagecontent">
+				<div id="left_menu" class="grid_3">
+					{% block menu %}
+					<ul>
+						{% block menulinks %}
+						{% for category in categories %}
+						<li><a href="{{ category.url }}">{{ category }}</a></li>
+						{% endfor %}
+						<li><a href="{% url product_list %}">Product list</a></li>
+						<li><a href="{% url cart %}">Your cart</a><li/>
+
+						{% if user.is_authenticated %}
+						<li><br />{% trans "Logged in as" %} {{ user }}</li>
+						<li><a href="{% url order_list %}">{% trans "Your orders" %}</a></li>
+						{% endif %}
+						{% endblock %}
+					</ul>
+					<p>
+                        <b>Example shop</b><br />
+                        Street 123<br />
+						1234 Django<br />
+						+1 12 34 56 78<br />
+						info@example.org
+					</p>
+					<p>
+						<b>Shoppingcart</b><br />
+						{% cart %}
+					</p>
+					{% endblock %}
+					
+				</div>
+				<div id="content" class="grid_9">
+						{% block content %}
+						
+						{% endblock %}
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+	{% block bottom %}{% endblock %}
+</body>
+</html>

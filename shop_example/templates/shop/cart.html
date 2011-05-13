@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<h1>{% trans "Your shopping cart" %}</h1>
+{% if cart_items %}
+<form method="post" action="{% url cart_update %}">
+  {% csrf_token %}
+<table style="width: 100%;" class="checkout">
+	<tr class="header">
+		<td></td><td class="product">Qty</td><td class="amount">Product</td><td class="price">Price</td><td class="total">Total</td>
+	</tr>
+	{% for itm in cart_items %}
+	<tr>
+		<td rowspan="{{ itm.itm.extra_price_fields|length|add:2 }}">{% if itm.item.icon %}<img src="" />{% endif %}</td>
+		<td rowspan="{{ itm.itm.extra_price_fields|length|add:2 }}" width="60"><input type="text" name="update_item-{{ itm.id }}"
+            value="{{itm.quantity}}"></td>
+		<td class="item">{{ itm.product.name }}</td>
+		<td>{{ itm.product.get_price }}</td>
+		<td>{{ itm.line_total }}</td>
+		<td rowspan="{{ itm.itm.extra_price_fields.count|length|add:2 }}">{% if itm.product %}<a href="?add_item={{ itm.item.id }}" title="Tilføj en {{ itm.item }}" class="add"></a><a href="?remove_item={{ itm.item.id }}" title="Fjern en {{ itm.item }}" class="remove"></a>{% endif %}</td>
+	</tr>
+	{% for extra_price_field in itm.extra_price_fields %}
+		<tr class="fee"><td colspan="2">+ {{ extra_price_field.0 }}</td><td>{{ extra_price_field.1 }}</td></tr>
+	{% endfor %}
+	<tr class="fee">
+		<td colspan="1">{% if itm.avoid %}
+			 - køb for {{ itm.avoid_fee }} mere og du sparer {{ itm.name|lower }}{% endif %}
+			{% if itm.avoid_item %}
+			<br />Hvad med en <a href="?add_item={{ itm.avoid_item.id }}">{{ itm.avoid_item }}</a>?
+			{% else %}
+			{% if itm.item.description %}
+			{{ itm.item.description|truncatewords:20 }}
+			{% endif %}
+			{% endif %}
+		</td>
+		<td colspan="3"></td>
+	</tr>
+	
+{% endfor %}
+	<tr>
+		<td colspan="4" style="text-align: right; padding-right: 25px;"><b>I alt</b></td><td><b>{{cart.total_price}}</b></td>
+	</tr>
+	{% for extra_price_field in cart.extra_price_fields %}
+        <tr>
+          <td colspan="4" style="text-align: right; padding-right: 25px;">Including {{ extra_price_field.0|lower }}</td>
+          <td>{{ extra_price_field.1 }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<div style="float: right;">
+  <a href="{% url checkout_shipping %}">{% trans "Proceed to checkout" %}</a>
+</div>
+  <p><input type="submit" value="{% trans "Update Shopping Cart" %}"/></p>
+</form>
+<form action="{% url cart_delete %}" method="post">
+  {% csrf_token %}
+  <p><input type="submit" value="{% trans "Empty Shopping Cart" %}"/></p>
+</form>
+{% else %}
+<p>
+  {% trans "Shopping cart is empty" %}
+</p>
+{% endif %}
+{% endblock %}

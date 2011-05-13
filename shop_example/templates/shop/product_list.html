@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+
+<h1>Products</h1>
+{% for object in object_list %}
+<div class="product">
+	<div class="price" style="float: right;">
+		<h3>{{object.unit_price}}</h3>
+	</div>
+	<a href="{% url product_detail object.slug %}">{{object.name}}</a>
+	<p>{{object.short_description}}</p>
+	<hr />
+</div>
+{% endfor %}
+{% endblock %}

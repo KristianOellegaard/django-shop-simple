@@ -1,0 +1,8 @@
+{% if cart.items.all %}
+	{% for item in cart.items.all %}
+		{{ item.quantity }}x {{ item.product }}<br />
+	{% endfor %}
+	<a href="{% url cart %}">To basket</a>
+{% else %}
+	<i>Empty</i>
+{% endif %}

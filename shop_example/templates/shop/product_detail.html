@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<div class="right">
+	<div class="button cart" style="">
+		<form method="post" action="{% url cart %}">{% csrf_token %}
+		<input type="image" src="/static/images/cart_bg.png" />
+		<input type="hidden" name="add_item_id" value="{{object.id}}">
+		<input type="hidden" name="add_item_quantity" value="1">
+		<br />Add to cart
+		</form>
+	</div>
+</div>
+<h1>{{object.name}}</h1>
+{{object.slug}}<br />
+{{object.short_description}}<br />
+{{object.long_description}}<br />
+
+<h3>{{object.unit_price}}</h3>
+
+Last modified: {{object.last_modified}}<br />
+{% endblock %}
